@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Lender.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">admin-service</a> &gt; <a href="index.source.html" class="el_package">com.idexcel.adminservice.entity</a> &gt; <span class="el_source">Lender.java</span></div><h1>Lender.java</h1><pre class="source lang-java linenums">package com.idexcel.adminservice.entity;
+
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+<span class="nc" id="L15">@Setter</span>
+<span class="nc" id="L16">@ToString</span>
+<span class="nc" id="L17">@NoArgsConstructor</span>
+<span class="fc" id="L18">@AllArgsConstructor</span>
+
+@Document(collection=&quot;Lenders&quot;)
+public class Lender {
+	@Id
+<span class="fc" id="L23">	private String id;</span>
+<span class="fc" id="L24">	private String name;</span>
+<span class="fc" id="L25">	private LenderAddress address;</span>
+<span class="fc" id="L26">	private LenderStatus status;</span>
+<span class="fc" id="L27">	private String createdBy;</span>
+<span class="fc" id="L28">	private String createdDate;</span>
+<span class="fc" id="L29">	private String updatedBy;</span>
+<span class="fc" id="L30">	private String updatedDate;</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

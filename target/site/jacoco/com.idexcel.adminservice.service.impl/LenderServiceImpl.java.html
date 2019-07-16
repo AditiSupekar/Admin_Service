@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LenderServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">admin-service</a> &gt; <a href="index.source.html" class="el_package">com.idexcel.adminservice.service.impl</a> &gt; <span class="el_source">LenderServiceImpl.java</span></div><h1>LenderServiceImpl.java</h1><pre class="source lang-java linenums">package com.idexcel.adminservice.service.impl;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.TimeZone;
+
+import  com.idexcel.adminservice.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import com.idexcel.adminservice.entity.Lender;
+import com.idexcel.adminservice.entity.LenderStatus;
+import com.idexcel.adminservice.exception.LenderAlreadyExistException;
+import com.idexcel.adminservice.service.LenderService;
+import com.idexcel.adminservice.DAO.LenderDAO;
+import com.idexcel.adminservice.exception.*;
+import com.idexcel.adminservice.dto.AdminDTO;
+import com.idexcel.adminservice.dto.PatchDTO;
+
+@Service
+public class LenderServiceImpl implements LenderService {
+	
+	
+	private LenderDAO lenderDAO;
+	
+	@Autowired
+<span class="fc" id="L31">	public LenderServiceImpl(LenderDAO lenderDAO) {</span>
+<span class="fc" id="L32">		this.lenderDAO = lenderDAO;</span>
+<span class="fc" id="L33">	}</span>
+	
+	
+<span class="fc" id="L36">	ModelMapperDTO theModelMapper = new ModelMapperDTO(); </span>
+	
+	
+	
+	public List&lt;Lender&gt; getLenders() {
+<span class="nc" id="L41">		return lenderDAO.findAll();</span>
+	}
+	
+	public Lender getLenderId(String theId) {
+		
+<span class="nc" id="L46">		Optional&lt;Lender&gt; lender = this.lenderDAO.findById(theId);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		if(lender == null) {</span>
+		}
+<span class="nc" id="L49">		Lender len = lender.get();</span>
+<span class="nc" id="L50">		return len;</span>
+	}
+	
+	public String saveLender(AdminDTO adminDTO) {
+		
+<span class="nc" id="L55">		String name = adminDTO.getName();</span>
+		
+<span class="nc" id="L57">		System.out.println(name);</span>
+		
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if (lenderDAO.findByName(name)==null){				</span>
+<span class="nc" id="L60">		Lender theLenders = theModelMapper.converttoEntity(adminDTO);</span>
+<span class="nc" id="L61">		theLenders.setId(&quot;12345678&quot;);</span>
+<span class="nc" id="L62">		theLenders.setStatus(LenderStatus.Active);</span>
+<span class="nc" id="L63">		theLenders.setCreatedBy(&quot;Praveen K&quot;);</span>
+<span class="nc" id="L64">		TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
+<span class="nc" id="L65">		DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm'Z'&quot;); </span>
+<span class="nc" id="L66">		df.setTimeZone(tz);</span>
+<span class="nc" id="L67">		String nowAsISO = df.format(new Date());</span>
+<span class="nc" id="L68">		theLenders.setCreatedDate(nowAsISO);</span>
+<span class="nc" id="L69">		theLenders.setUpdatedBy(&quot;Praveen K&quot;);</span>
+<span class="nc" id="L70">		theLenders.setUpdatedDate(nowAsISO);</span>
+		
+<span class="nc" id="L72">		lenderDAO.insert(theLenders);</span>
+		
+<span class="nc" id="L74">		return theLenders.getId();</span>
+		
+		} else {
+<span class="nc" id="L77">			throw new LenderAlreadyExistException (&quot;lender Exist&quot; + name);</span>
+		}
+
+	}
+
+	public void updateById(Lender theLenders, String _id) {
+<span class="nc" id="L83">		this.lenderDAO.save(theLenders);</span>
+<span class="nc" id="L84">	}</span>
+
+	public void deleteById(String _id) {
+<span class="nc" id="L87">		this.lenderDAO.deleteById(_id);</span>
+		
+<span class="nc" id="L89">	}</span>
+public void updateStatus(PatchDTO PatchDTO, String _id) {
+		
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		if (lenderDAO.existsById(_id)) {</span>
+<span class="nc" id="L93">		Lender theLenders = this.lenderDAO.findById(_id).orElse(null);</span>
+		
+<span class="nc" id="L95">		theLenders.setStatus(LenderStatus.Active);	</span>
+<span class="nc" id="L96">		this.lenderDAO.save(theLenders);</span>
+<span class="nc" id="L97">		}</span>
+		
+		else
+<span class="nc" id="L100">			throw new LenderNotFoundException (&quot;The Lender with Id:&quot;+ _id +&quot;does not exist&quot;);</span>
+<span class="nc" id="L101">	}</span>
+	
+	
+	public ResponseEntity&lt;String&gt; getMetaData(String _id) {
+		
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if (lenderDAO.existsById(_id)) </span>
+<span class="nc" id="L107">			return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+		else
+<span class="nc" id="L109">		return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+	}
+
+	public boolean checkLender(String _id) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (lenderDAO.existsById(_id))</span>
+<span class="nc" id="L114">			return true;</span>
+		
+		else
+<span class="nc" id="L117">			throw new LenderNotFoundException (&quot;The Lender with Id:&quot;+ _id +&quot;do not exist&quot; );</span>
+			
+	}
+
+	@Override
+	public Lender addLender(Lender theLender) {
+<span class="nc" id="L123">		return null;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
