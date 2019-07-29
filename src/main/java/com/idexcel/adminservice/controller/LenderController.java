@@ -1,5 +1,7 @@
 package com.idexcel.adminservice.controller;
 
+
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,14 @@ public class LenderController {
 		return lenderServiceImpl.getLenders();
 	}
 
+	@GetMapping("/books")
+	public ResponseEntity<String> getBooks(){
+		RestTemplate restTemplate = new RestTemplate();
+		String resourceUrl  = "https://jsonplaceholder.typicode.com/todos/";
+		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl, String.class);
+		return response;
+	}
+	
 	@GetMapping("/lenders/{lenderId}")
 	public Lender getLenderId(@PathVariable String lenderId){
 		Lender theLender = lenderServiceImpl.getLenderId(lenderId);
